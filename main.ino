@@ -64,7 +64,7 @@ void loop()
 		{
 			
 			lcd.setCursor(0,0);
-			lcd.print("Un seul choix   ");
+			lcd.print("Un seul choix   ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
 			break;
 		}
 		
