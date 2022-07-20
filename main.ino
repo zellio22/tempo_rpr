@@ -12,34 +12,29 @@ LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C
 // def des variable global 
 
 unsigned long tempo_debut;  	 	//DEbut	
-unsigned long tempo_fin;			//Fin
+unsigned long tempo_fin;			//Fin voir pour supp la variable
 unsigned long delay_aff;			//delay pour affichage
 float temp_tempo;					//Temps
+int tempo = 0;						//Variable a 1 pour tenmpo en mesure
 
+//def des pin Entrée /sortie
+
+int EX = 31; 					//pin comutateur choix Exit d'ezexit
+int D_EX = 33;					//pin comutateur choix Exit d'ezexit
 int in_tempo_409 = 35;			//defini la pin utiliser pour le 409
 int in_tempo_401 = 37;			//defini la pin utiliser pour le 401
+int out_relay = 39;
 
-int EX = 31; 			//pin comutateur choix Exit d'esexit
-int D_EX = 33;			//pin comutateur choix Exit d'esexit
 
-//Variable internes
-int statein_409 = 0;	//etat actuel de l'entrée 
-int lastin_409 = 0;		//etat precedent de l'entrée
-
-int last_choix=0;
-int statein_401 = 0;	//etat actuel de l'entrée 
-int lastin_401 = 0;		//etat precedent de l'entrée
-
-float tempo = 0;				//Variable a 1 pour tenmpo en mesure
 
 int choix()
 {
 	if (digitalRead(EX)==0 && digitalRead(D_EX)==1){ return 1;} // CHOIX TEMPO exitation 
-	if (digitalRead(EX)==1 && digitalRead(D_EX)==0){ return 2;} // CHOIX TEMPO de-esxitation
+	if (digitalRead(EX)==1 && digitalRead(D_EX)==0){ return 2;} // CHOIX TEMPO dezesxit
 	else return 0;
 }
 
-void setup() 
+void setup() // la boucle setup  est executer unique a la mise en service de l'arduino
 {
 
 	lcd.init();			// initialisation de l'ecrant LCD 
@@ -47,20 +42,32 @@ void setup()
 	lcd.setCursor(0,0); // positionement du curseur 
 	Serial.begin(9600); // initialise la connexion série à 9600 bauds
 	
-	//definition des entrées 
+	//definition du roles des E/S 
 	pinMode(in_tempo_409, INPUT); // 409 
 	pinMode(in_tempo_401, INPUT); // 401
-	pinMode(EX, INPUT);	// choix E
-	pinMode(D_EX, INPUT); // choix D
+	pinMode(EX, INPUT);	// choix Exitation
+	pinMode(D_EX, INPUT); // choix Desexciation
 
 }
 
 void loop() 
 {
-	delay(10);//
-	switch (choix()) 
+
+	switch (choix()) // voir comme en dessou
+	/*
+	La structure de controle Switch est une structure de controle qui permet de faire une seule action en fonction 
+	du return de la fonction choix
+	la fonction Choix return 0 pour une selection incorect 
+	la fonction Choix return 1 pour une selection exitation
+	la fonction Choix return 2 pour une selection desexitation
+	*/
+
 	{
-		case 0: // BUG 
+		case 0: // corespond a un " if choix ==0 "et nexecute pas la suite du switch
+			lcd.clear();
+			lcd.setCursor(0,0);
+			lcd.print("Choix Incorect");
+			break;
 		{
 			
 			lcd.setCursor(0,0);
@@ -102,13 +109,13 @@ void loop()
 			}
 
 
-			break;
+			break;//Fuck the system ...
 		}
 		
-		case 2: // CHOIX TEMPO de-esxitation
+		case 2: // CHOIX TEMPO de-esxitation reste a coder ici 
 		{
 			
-			lcd.setCursor(0,0);
+			lcd.setCursor(0,0); 
 			lcd.print("TEMPO de-zexit  ");
 			break;
 		}
