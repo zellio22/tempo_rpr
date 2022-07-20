@@ -13,6 +13,7 @@ LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C
 
 unsigned long tempo_debut;  	 	//DEbut	
 unsigned long tempo_fin;			//Fin
+unsigned long delay_aff;			//delay pour affichage
 float temp_tempo;					//Temps
 
 int in_tempo_409 = 35;			//defini la pin utiliser pour le 409
@@ -40,6 +41,7 @@ int choix()
 
 void setup() 
 {
+
 	lcd.init();			// initialisation de l'ecrant LCD 
 	lcd.backlight();	// allumage du retro-eclairage 
 	lcd.setCursor(0,0); // positionement du curseur 
@@ -55,7 +57,7 @@ void setup()
 
 void loop() 
 {
-
+	delay(10);//
 	switch (choix()) 
 	{
 		case 0: // BUG 
@@ -85,12 +87,18 @@ void loop()
 				lcd.print("Temps : ");// on affiche le texte
 				lcd.print(temp_tempo);// on affiche le temps
 				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'
+				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne
+				lcd.print("                  ");// on efface la 3eme ligne
 			}
 
 			if(tempo==1){
-				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne
-				lcd.print("Tempo en cours: ");// on affiche le texte
-				lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time 
+				if(millis()-delay_aff>100){ //delay discret de 100ms
+					delay_aff=millis(); // on enregistre le temps
+					lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne
+					lcd.print("Tempo en cours: ");// on affiche le texte
+					lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne
+					lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time 
+				}
 			}
 
 
