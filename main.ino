@@ -1,6 +1,12 @@
 
 #include <LiquidCrystal_I2C.h>
 #include <arduino.h>
+
+//reste a faire 
+//une gestion du relai d'exitation tempo 
+//une raz 
+//la mesure des tempos a la d'esexitation
+
 LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C
 
 // def des variable global 
