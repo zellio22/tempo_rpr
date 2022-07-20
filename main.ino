@@ -4,7 +4,7 @@
 
 //reste a faire 
 //une gestion du relai d'exitation tempo 
-//une raz 
+//une raz de toutes les variables global car je code comme un porc 
 //la mesure des tempos a la d'esexitation
 
 LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C
