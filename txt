@@ -1,0 +1,38 @@
+			// tempos a l'exitation
+
+
+			// debut de la tempo 
+			statein_t1_d = digitalRead(in_t1_d); 	// lecture etat 409 
+				if (statein_t1_d == 0){				// si pas de 409 alors pas de debut de tempo 
+					t1=0;						// 
+				}
+					
+				if (statein_t1_d != lastin_t1_d && t1 == 0){ //
+					if (statein_t1_d == HIGH){
+						t1 = 1;
+						tempo1_e_d = millis(); // enregistrement du moment t debut		
+						Serial.print("Debut 27 ur ou 26 ur / ");
+						Serial.println(tempo1_e_d);
+					}
+					
+					lastin_t1_d = statein_t1_d; // memorise l'etat courant de l'entrée
+				}
+			
+			statein_t1_f = digitalRead(in_t1_f);		
+				if (statein_t1_f != lastin_t1_f && t1 == 1){
+					if (statein_t1_f == HIGH){
+					t1 = 0;
+					tempo1_e_f = millis(); // enregistrement du moment de fin 
+					temp1_t = (tempo1_e_f - tempo1_e_d)*0.001;
+					Serial.print("Fin 27 ur ou 26 ur / ");
+					Serial.print(temp1_t);
+					Serial.print(" / ");
+					Serial.println(tempo1_e_f);
+			
+			
+					
+					}
+					
+				lastin_t1_f = statein_t1_f; // memorise l'etat courant de l'entrée	peut etre le monter dans if du dessu 
+				}
+			
