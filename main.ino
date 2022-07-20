@@ -7,10 +7,10 @@ LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C
 
 unsigned long tempo_debut;  	 	//DEbut	
 unsigned long tempo_fin;			//Fin
-float temp_t;						//Temps
+float temp_tempo;					//Temps
 
-int in_td = 1;			//defini la pin utiliser pour le 409
-int in_tf = 2;			//defini la pin utiliser pour le 401
+int in_tempo_409 = 35;			//defini la pin utiliser pour le 409
+int in_tempo_401 = 37;			//defini la pin utiliser pour le 401
 
 int EX = 31; 			//pin comutateur choix Exit d'esexit
 int D_EX = 33;			//pin comutateur choix Exit d'esexit
@@ -23,7 +23,7 @@ int last_choix=0;
 int statein_401 = 0;	//etat actuel de l'entrée 
 int lastin_401 = 0;		//etat precedent de l'entrée
 
-int t1 = 0;				//Variable a 1 pour tenmpo en mesure
+float tempo = 0;				//Variable a 1 pour tenmpo en mesure
 
 int choix()
 {
@@ -40,8 +40,8 @@ void setup()
 	Serial.begin(9600); // initialise la connexion série à 9600 bauds
 	
 	//definition des entrées 
-	pinMode(in_td, INPUT); // 409 
-	pinMode(in_tf, INPUT); // 401
+	pinMode(in_tempo_409, INPUT); // 409 
+	pinMode(in_tempo_401, INPUT); // 401
 	pinMode(EX, INPUT);	// choix E
 	pinMode(D_EX, INPUT); // choix D
 
@@ -49,14 +49,6 @@ void setup()
 
 void loop() 
 {
-	delay(1000);
-	Serial.print("choix : ");
-	Serial.println(choix());
-	Serial.print("EX : ");
-	Serial.println(digitalRead(EX));
-	Serial.print("D_EX : ");
-	Serial.println(digitalRead(D_EX));
-
 
 	switch (choix()) 
 	{
@@ -70,9 +62,32 @@ void loop()
 		
 		case 1: // CHOIX TEMPO exitation 
 		{
+			lcd.setCursor(0,0);// on positionement du curseur a la ligne 0 colonne 0
+			lcd.print("TEMPO exitation ");// on affiche le message
 			
-			lcd.setCursor(0,0);
-			lcd.print("TEMPO exitation ");
+			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
+			{
+				tempo = 1; // on active le tempo
+				tempo_debut = millis(); // on enregistre le temps de début
+			}
+			if(digitalRead(in_tempo_401)== 1 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
+			{
+				tempo = 0; // on desactive le tempo
+				tempo_fin = millis(); // on enregistre le temps de fin
+				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
+				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne 
+				lcd.print("Temps : ");// on affiche le texte
+				lcd.print(temp_tempo);// on affiche le temps
+				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'
+			}
+
+			if(tempo==1){
+				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne
+				lcd.print("Tempo en cours: ");// on affiche le texte
+				lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time 
+			}
+
+
 			break;
 		}
 		
