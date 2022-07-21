@@ -8,8 +8,8 @@
 
 //reste a faire 
 
-
-//la mesure des tempos a la d'esexitation
+//voire commen gerer la cmd du relai pour EX/D_EX
+//la mesure des tempos a la d'esexitation a verifier 
 
 #define ROWS 4				//Nombre de lignes Uniquement avec la lib paralax
 #define COLS 10				//Nombre de colonnes Uniquement avec la lib paralax
@@ -128,19 +128,6 @@ void loop()
 				digitalWrite(out_relay, LOW);	// on etein le relai
 			}
 
-			if(tempo==1){		//Affichage chrono 
-				if(millis()-delay_aff>100){ //delay discret de 100ms
-					delay_aff=millis(); // on enregistre le temps
-					lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
-					lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
-					//lcd.at(0,1,"Tempo en cours: ");			//PARALLAX
-					lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
-					lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
-					//lcd.at(0,2,float(millis()-tempo_debut)/1000);	//PARALLAX
-				}
-			}
-
-
 			break;//Fuck the system ...
 		}
 		
@@ -149,13 +136,50 @@ void loop()
 			
 			lcd.setCursor(0,0); 		//I2C
 			lcd.print("TEMPO de-zexit  ");//I2C
-			break;
+			
+			if(digitalRead(in_tempo_409)==0 && tempo==0 ) //
+			{
+				tempo = 1; // on active le tempo
+				tempo_debut = millis(); // on enregistre le temps de début
+			}
+
+			if(digitalRead(in_tempo_401)== 1 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
+			{
+				tempo_fin = millis(); // on enregistre le temps de fin
+				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
+				tempo = 0; // on desactive le tempo
+				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
+				lcd.print("Temps : ");// on affiche le texte					//I2C
+				//lcd.at(0,1,"Temps : ");	//PARALLAX
+				lcd.print(temp_tempo);// on affiche le temps					//I2C
+				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
+				//lcd.at(0,1,"Temps : ");	//PARALLAX
+				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
+				lcd.print("                  ");// on efface la 3eme ligne
+				//lcd.at(0,2,"                  ");	//PARALLAX
+				delay(200);						// on attend 200ms pour repos de la tempo
+				digitalWrite(out_relay, LOW);	// on etein le relai
+			}
+			break;//Fu
+		}
+
+		if(tempo==1){		//Affichage chrono 
+			if(millis()-delay_aff>100){ //delay discret de 100ms
+				delay_aff=millis(); // on enregistre le temps
+				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
+				lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
+				//lcd.at(0,1,"Tempo en cours: ");			//PARALLAX
+				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
+				lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
+				//lcd.at(0,2,float(millis()-tempo_debut)/1000);	//PARALLAX
+			}
 		}
 		
 	}
 
 if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
 	digitalWrite(out_relay, HIGH);// on allume le relai
+	//besoin d'ajouter une condition Ex/D_ex pour que le relai ne soit pas allume si on choisi d'esex
 	}
 
 if (digitalRead(in_raz)==1){		// si le raz est en HIGH
