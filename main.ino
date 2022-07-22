@@ -163,7 +163,7 @@ void loop()
 			break;//Fu
 		}
 
-		if(tempo==1){		//Affichage chrono 
+		if(tempo==1){		//Affichage chrono toujours dans le switch t con ou koi 
 			if(millis()-delay_aff>100){ //delay discret de 100ms
 				delay_aff=millis(); // on enregistre le temps
 				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
