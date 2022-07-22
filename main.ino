@@ -163,19 +163,21 @@ void loop()
 			break;//Fu
 		}
 
-		if(tempo==1){		//Affichage chrono toujours dans le switch t con ou koi 
-			if(millis()-delay_aff>100){ //delay discret de 100ms
-				delay_aff=millis(); // on enregistre le temps
-				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
-				lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
-				//lcd.at(0,1,"Tempo en cours: ");			//PARALLAX
-				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
-				lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
-				//lcd.at(0,2,float(millis()-tempo_debut)/1000);	//PARALLAX
-			}
-		}
+
 		
 	}
+
+if(tempo==1){		//Affichage chrono
+	if(millis()-delay_aff>100){ //delay discret de 100ms
+		delay_aff=millis(); // on enregistre le temps
+		lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
+		lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
+		//lcd.at(0,1,"Tempo en cours: ");			//PARALLAX
+		lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
+		lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
+		//lcd.at(0,2,float(millis()-tempo_debut)/1000);	//PARALLAX
+	}
+}
 
 if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
 	digitalWrite(out_relay, HIGH);// on allume le relai
