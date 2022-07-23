@@ -102,6 +102,10 @@ void loop()
 		{
 			lcd.setCursor(0,0);// on positionement du curseur a la ligne 0 colonne 0
 			lcd.print("TEMPO exitation ");// on affiche le message
+
+			if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
+				digitalWrite(out_relay, HIGH);// on allume le relai
+			}
 			//lcd.at(0,0,"TEMPO exitation ");	//PARALLAX
 			
 			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
@@ -136,6 +140,10 @@ void loop()
 			
 			lcd.setCursor(0,0); 		//I2C
 			lcd.print("TEMPO de-zexit  ");//I2C
+
+			if (tempo==0 && digitalRead(in_start)==1){// 
+				digitalWrite(out_relay, LOW);// 
+			}
 			
 			if(digitalRead(in_tempo_409)==0 && tempo==0 ) //
 			{
@@ -179,11 +187,8 @@ if(tempo==1){		//Affichage chrono
 	}
 }
 
-if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
-	digitalWrite(out_relay, HIGH);// on allume le relai
-	//besoin d'ajouter une condition Ex/D_ex pour que le relai ne soit pas allume si on choisi d'esex
-	}
 
+//raz
 if (digitalRead(in_raz)==1){		// si le raz est en HIGH
 	digitalWrite(out_relay, LOW);	// on etein le relai
 	temp_tempo=0;					//Reset du timer
