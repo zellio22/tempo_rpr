@@ -3,7 +3,7 @@
 
 #include <LiquidCrystal_I2C.h> 	//Lib I2C en focntion de l'ecrant
 //#include <ParallaxLCD.h>		//Lib ParallaxLCD pour LCD serial //PARALLAX
-#include <arduino.h>
+//#include <arduino.h>
 //#include <SoftwareSerial.h>		//Voir la necessitée d'include cette LIB normalement non //PARALLAX
 
 //reste a faire 
@@ -28,16 +28,16 @@ int tempo = 0;						//Variable a 1 pour tenmpo en mesure
 
 //def des pin Entrée
 
-int EX = 0; 					//pin comutateur choix Exit d'ezexit
-int D_EX = 1;					//pin comutateur choix Exit d'ezexit
-int in_tempo_409 = 2;			//defini la pin utiliser pour le 409
-int in_tempo_401 = 3;			//defini la pin utiliser pour le 401
-int in_start = 4;				//defini la pin utiliser pour le start
-int in_raz = 5;					//defini la pin utiliser pour le raz
+int EX = 30; 					//pin comutateur choix Exit d'ezexit
+int D_EX = 31;					//pin comutateur choix Exit d'ezexit
+int in_tempo_409 = 32;			//defini la pin utiliser pour le 409
+int in_tempo_401 = 33;			//defini la pin utiliser pour le 401
+int in_start = 34;				//defini la pin utiliser pour le start
+int in_raz = 35;					//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
-int out_relay = 6;				//defini la pin utiliser pour le relai
+int out_relay = 36;				//defini la pin utiliser pour le relai
 
 
 
@@ -66,8 +66,8 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	//definition du roles des E/S 
 	pinMode(in_tempo_409, INPUT); 		// 409 
 	pinMode(in_tempo_401, INPUT); 		// 401
-	pinMode(EX, INPUT);					// choix Exitation
-	pinMode(D_EX, INPUT); 				// choix Desexciation
+	pinMode(EX, INPUT_PULLUP);					// choix Exitation
+	pinMode(D_EX, INPUT_PULLUP); 				// choix Desexciation
 	pinMode(in_start,INPUT_PULLUP);		// start avec pullup
 	pinMode(in_raz,INPUT_PULLUP);		// raz avec pullup
 
@@ -102,6 +102,11 @@ void loop()
 		{
 			lcd.setCursor(0,0);// on positionement du curseur a la ligne 0 colonne 0
 			lcd.print("TEMPO exitation ");// on affiche le message
+
+			if (tempo==0 && digitalRead(out_relay)==HIGH){
+				digitalWrite(out_relay, LOW);
+				delay(50);
+			}
 
 			if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
 				digitalWrite(out_relay, HIGH);// on allume le relai
@@ -140,6 +145,11 @@ void loop()
 			
 			lcd.setCursor(0,0); 		//I2C
 			lcd.print("TEMPO de-zexit  ");//I2C
+
+			if (tempo==0 && digitalRead(out_relay)==LOW){
+				digitalWrite(out_relay, HIGH);
+				delay(50);
+			}
 
 			if (tempo==0 && digitalRead(in_start)==1){// 
 				digitalWrite(out_relay, LOW);// 
