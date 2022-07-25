@@ -37,7 +37,7 @@ int in_raz = 35;					//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
-int out_relay = 36;				//defini la pin utiliser pour le relai
+int out_relay = 8;				//defini la pin utiliser pour le relai 3 de la platine 
 
 
 
