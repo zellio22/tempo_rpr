@@ -200,7 +200,7 @@ if(tempo==1){		//Affichage chrono
 
 //raz
 if (digitalRead(in_raz)==1){		// si le raz est en HIGH
-	digitalWrite(out_relay, LOW);	// on etein le relai
+	//digitalWrite(out_relay, LOW);	// on etein le relai
 	temp_tempo=0;					//Reset du timer
 	tempo = 0;						//Reset de l'etat tempo
 	lcd.setCursor(0,0); 
