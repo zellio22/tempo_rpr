@@ -13,7 +13,7 @@
 
 #define ROWS 4				//Nombre de lignes Uniquement avec la lib paralax
 #define COLS 10				//Nombre de colonnes Uniquement avec la lib paralax
-//ParallaxLCD lcd(2,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
+//ParallaxLCD lcd(1,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
 
 
 LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C //I2C
