@@ -4,4 +4,6 @@ Pour Utiliser la LIB <ParallaxLCD.h> il faut changer les lignes suivantes ://I2C
 
 //lib paralax https://github.com/iamthechad/parallax_lcd/blob/master/examples/LCD_2x16/LCD_2x16.ino
 
+Info shield Relais 
+https://docs.arduino.cc/tutorials/4-relays-shield/4-relay-shield-basics#hardware--software-needed
 
