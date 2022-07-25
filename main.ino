@@ -66,7 +66,9 @@ lcds.playTone(212, 216, 224);	//MI*1 3
 lcds.playTone(211, 216, 225);	//FA*1 3
 lcds.playTone(212, 216, 220);	//DO*1 3
 lcds.playTone(212, 215, 227);	//SOL# 3
-lcds.playTone(212, 216, 225);	//FA*1 3
+lcds.playTone(211, 216, 225);	//FA*1 3
+lcds.playTone(213, 216, 220);	//DO 1 *1
+lcds.playTone(212, 215, 229);	//LA 6
 
 }
 
