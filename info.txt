@@ -7,3 +7,56 @@ Pour Utiliser la LIB <ParallaxLCD.h> il faut changer les lignes suivantes ://I2C
 Info shield Relais 
 https://docs.arduino.cc/tutorials/4-relays-shield/4-relay-shield-basics#hardware--software-needed
 
+
+void ParallaxLCD::playTone(int duration, int scale, int note) {
+/**
+ * Duration: 208 - 214 (1/64th note - 1 whole note[2 secs])
+ * Scale   : 215 - 219 (3rd - 7th scale)
+ * Note    : 220 - 232 (A, A#, B, etc..., F#, F, G#)
+ */
+
+lcds.playTone(210, 216, 222);
+lcds.playTone(210, 216, 222);
+lcds.playTone(210, 216, 222);
+lcds.playTone(210, 215, 229);
+lcds.playTone(219, 216, 228);
+
+lcds.playTone(210, 216, 222);
+lcds.playTone(210, 215, 229);
+
+DO  220
+DO# 221
+RE  222
+RE# 223
+MI  224
+FA  225
+FA# 226
+SOL 227
+SOL#228
+LA 229
+LA # 230
+SI 231
+
+LA 3    lcds.playTone(211, 215, 229);
+LA 3    lcds.playTone(, 215, 229);
+LA 3    lcds.playTone(, 215, 229);
+FA 3    lcds.playTone(, 215, 225);
+DO 1 *1 lcds.playTone(, 216, 220);
+LA 3    lcds.playTone(, 215, 222);
+FA 3    lcds.playTone(, 215, 225);
+DO 1 *1 lcds.playTone(, 216, 220);
+LA 6    lcds.playTone(, 215, 222);
+MI 3 *1 lcds.playTone(, 216, 224);
+MI 3 *1 lcds.playTone(, 216, 224);
+MI 3 *1 lcds.playTone(, 216, 224);
+FA 3 *1 lcds.playTone(, 216, 225);
+DO 1 *1 lcds.playTone(, 216, 220);
+SOL#3   lcds.playTone(, 215, 228);
+FA 3    lcds.playTone(, 215, 225);
+DO 1 *1 lcds.playTone(, 216, 220);
+LA 6    lcds.playTone(, 215, 222);
+
+
+
+
+

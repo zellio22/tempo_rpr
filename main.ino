@@ -2,9 +2,9 @@
 
 
 #include <LiquidCrystal_I2C.h> 	//Lib I2C en focntion de l'ecrant
-//#include <ParallaxLCD.h>		//Lib ParallaxLCD pour LCD serial //PARALLAX
+#include <ParallaxLCD.h>		//Lib ParallaxLCD pour LCD serial //PARALLAX
 //#include <arduino.h>
-//#include <SoftwareSerial.h>		//Voir la necessitée d'include cette LIB normalement non //PARALLAX
+#include <SoftwareSerial.h>		//Voir la necessitée d'include cette LIB normalement non //PARALLAX
 
 //reste a faire 
 
@@ -12,11 +12,14 @@
 //la mesure des tempos a la d'esexitation a verifier 
 
 #define ROWS 4				//Nombre de lignes Uniquement avec la lib paralax
-#define COLS 10				//Nombre de colonnes Uniquement avec la lib paralax
-//ParallaxLCD lcd(1,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
+#define COLS 20				//Nombre de colonnes Uniquement avec la lib paralax
 
+ParallaxLCD lcds(3,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
+//ligne Colone
 
 LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C //I2C
+//Colone Ligne
+
 
 //def des variable global 
 
@@ -28,18 +31,44 @@ int tempo = 0;						//Variable a 1 pour tenmpo en mesure
 
 //def des pin Entrée
 
-int EX = 4; 					//pin comutateur choix Exit d'ezexit
-int D_EX = 5;					//pin comutateur choix Exit d'ezexit
-int in_tempo_409 = 2;			//defini la pin utiliser pour le 409
-int in_tempo_401 = 3;			//defini la pin utiliser pour le 401
-int in_start = 6;				//defini la pin utiliser pour le start
-int in_raz = 7;					//defini la pin utiliser pour le raz
+int EX = 30;//30 //4					//pin comutateur choix Exit d'ezexit
+int D_EX = 31;//31 //5					//pin comutateur choix Exit d'ezexit
+int in_tempo_409 = 32;//32 //2			//defini la pin utiliser pour le 409
+int in_tempo_401 = 33;//33 //3			//defini la pin utiliser pour le 401
+int in_start = 34;//34 //6				//defini la pin utiliser pour le start
+int in_raz = 35;//35	//7				//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
-int out_relay = 8;				//defini la pin utiliser pour le relai 3 de la platine 
+int out_relay = 36;//36 //8				//defini la pin utiliser pour le relai 3 de la platine 
 
+/**
+ * void ParallaxLCD::playTone(int duration, int scale, int note)
+ * Duration: 208 - 214 (1/64th note - 1 whole note[2 secs])
+ * Scale   : 215 - 219 (3rd - 7th scale)
+ * Note    : 220 - 232 (A, A#, B, etc..., F#, F, G#)
+ */
 
+void impmarch()
+{
+lcds.playTone(212, 215, 229);	//LA 3
+lcds.playTone(212, 215, 229);	//LA 3
+lcds.playTone(212, 215, 229);	//LA 3
+lcds.playTone(211, 215, 225);	//FA 3
+lcds.playTone(212, 216, 220);	//DO 1 *1
+lcds.playTone(212, 215, 229);	//LA 3 
+lcds.playTone(211, 215, 225);	//FA 3
+lcds.playTone(213, 216, 220);	//DO 1 *1
+lcds.playTone(212, 215, 229);	//LA 6
+lcds.playTone(212, 216, 224);	//MI*1 3
+lcds.playTone(212, 216, 224);	//MI*1 3
+lcds.playTone(212, 216, 224);	//MI*1 3
+lcds.playTone(211, 216, 225);	//FA*1 3
+lcds.playTone(212, 216, 220);	//DO*1 3
+lcds.playTone(212, 215, 227);	//SOL# 3
+lcds.playTone(212, 216, 225);	//FA*1 3
+
+}
 
 int choix()
 {
@@ -58,10 +87,10 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	Serial.begin(9600); // initialise la connexion série "USB" à 9600 bauds 
 	
 	//Set du LCD serial 
-	//lcd.setup();	//PARA
-	//lcd.backLightOn();//retro-eclairage	//PARALLAX
-	//delay(1000);//Wait du LCD 			//PARALLAX
-	//lcd.empty();//Clear de l'ecran		//PARALLAX
+	lcds.setup();	//PARA
+	lcds.backLightOn();//retro-eclairage	//PARALLAX
+	delay(1000);//Wait du LCD 			//PARALLAX
+	lcds.empty();//Clear de l'ecran		//PARALLAX
 	
 	//definition du roles des E/S 
 	pinMode(in_tempo_409, INPUT_PULLUP); 		// 409 
@@ -94,7 +123,7 @@ void loop()
 			
 			lcd.setCursor(0,0);
 			lcd.print("Un seul choix   ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
-			//lcd.at(0,0,"Choix Incorect");		//PARALLAX
+			lcds.at(0,0,"Choix Incorect");		//PARALLAX
 			break;
 		}
 		
@@ -102,6 +131,7 @@ void loop()
 		{
 			lcd.setCursor(0,0);// on positionement du curseur a la ligne 0 colonne 0
 			lcd.print("TEMPO exitation ");// on affiche le message
+			lcds.at(0,0,"TEMPO exitation ");		//PARALLAX
 
 			if (tempo==0 && digitalRead(out_relay)==HIGH){
 				digitalWrite(out_relay, LOW);
@@ -111,7 +141,6 @@ void loop()
 			if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
 				digitalWrite(out_relay, HIGH);// on allume le relai
 			}
-			//lcd.at(0,0,"TEMPO exitation ");	//PARALLAX
 			
 			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
 			{
@@ -126,15 +155,19 @@ void loop()
 				tempo = 0; // on desactive le tempo
 				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
 				lcd.print("Temps : ");// on affiche le texte					//I2C
-				//lcd.at(0,1,"Temps : ");	//PARALLAX
+				lcds.at(1,0,"Temps : ");	//PARALLAX
 				lcd.print(temp_tempo);// on affiche le temps					//I2C
+				lcds.at(1,8,String(temp_tempo));	//PARALLA
 				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
-				//lcd.at(0,1,"Temps : ");	//PARALLAX
+				lcds.at(1,12," s       ");
+				
 				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
 				lcd.print("                  ");// on efface la 3eme ligne
-				//lcd.at(0,2,"                  ");	//PARALLAX
-				delay(200);						// on attend 200ms pour repos de la tempo
+				lcds.at(2,0,"                     ");	//PARALLAX
+				//delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
+				impmarch();		//play la musique
+				
 			}
 
 			break;//Fuck the system ...
@@ -145,6 +178,7 @@ void loop()
 			
 			lcd.setCursor(0,0); 		//I2C
 			lcd.print("TEMPO de-zexit  ");//I2C
+			lcds.at(0,0,"TEMPO de-zexit  ");		//PARALLAX
 
 			if (tempo==0 && digitalRead(out_relay)==LOW){
 				digitalWrite(out_relay, HIGH);
@@ -168,13 +202,13 @@ void loop()
 				tempo = 0; // on desactive le tempo
 				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
 				lcd.print("Temps : ");// on affiche le texte					//I2C
-				//lcd.at(0,1,"Temps : ");	//PARALLAX
+				lcds.at(0,1,"Temps : ");	//PARALLAX
 				lcd.print(temp_tempo);// on affiche le temps					//I2C
 				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
-				//lcd.at(0,1,"Temps : ");	//PARALLAX
+				lcds.at(0,1,"Temps : ");	//PARALLAX
 				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
 				lcd.print("                  ");// on efface la 3eme ligne
-				//lcd.at(0,2,"                  ");	//PARALLAX
+				lcds.at(0,2,"                  ");	//PARALLAX
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 			}
@@ -190,10 +224,10 @@ if(tempo==1){		//Affichage chrono
 		delay_aff=millis(); // on enregistre le temps
 		lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
 		lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
-		//lcd.at(0,1,"Tempo en cours: ");			//PARALLAX
+		lcds.at(1,0,"Tempo en cours: ");			//PARALLAX
 		lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
 		lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
-		//lcd.at(0,2,float(millis()-tempo_debut)/1000);	//PARALLAX
+		lcds.at(2,0,String(float(millis()-tempo_debut)/1000));	//PARALLAX
 	}
 }
 
@@ -205,16 +239,16 @@ if (digitalRead(in_raz)==1){		// si le raz est en HIGH
 	tempo = 0;						//Reset de l'etat tempo
 	lcd.setCursor(0,0); 
 	lcd.print("                    ");		//I2C
-	//lcd.at(0,0,"                    ");	//PARALLAX
+	lcds.at(0,0,"                    ");	//PARALLAX
 	lcd.setCursor(0,1); 
 	lcd.print("                    ");		//I2C
-	//lcd.at(0,1,"                    ");	//PARALLAX
+	lcds.at(1,0,"                    ");	//PARALLAX
 	lcd.setCursor(0,2);
 	lcd.print("                    ");		//I2C
-	//lcd.at(0,2,"                    ");	//PARALLAX
+	lcds.at(2,0,"                    ");	//PARALLAX
 	lcd.setCursor(0,3);
 	lcd.print("                    ");		//I2C	
-	//lcd.at(0,3,"                    ");	//PARALLAX
+	lcds.at(3,0,"                    ");	//PARALLAX
 	}
 
 
