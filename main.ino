@@ -13,7 +13,7 @@
 
 #define ROWS 4				//Nombre de lignes Uniquement avec la lib paralax
 #define COLS 10				//Nombre de colonnes Uniquement avec la lib paralax
-//ParallaxLCD lcd(2,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
+//ParallaxLCD lcd(1,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
 
 
 LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C //I2C
@@ -28,16 +28,16 @@ int tempo = 0;						//Variable a 1 pour tenmpo en mesure
 
 //def des pin Entrée
 
-int EX = 30; 					//pin comutateur choix Exit d'ezexit
-int D_EX = 31;					//pin comutateur choix Exit d'ezexit
-int in_tempo_409 = 32;			//defini la pin utiliser pour le 409
-int in_tempo_401 = 33;			//defini la pin utiliser pour le 401
-int in_start = 34;				//defini la pin utiliser pour le start
-int in_raz = 35;					//defini la pin utiliser pour le raz
+int EX = 4; 					//pin comutateur choix Exit d'ezexit
+int D_EX = 5;					//pin comutateur choix Exit d'ezexit
+int in_tempo_409 = 2;			//defini la pin utiliser pour le 409
+int in_tempo_401 = 3;			//defini la pin utiliser pour le 401
+int in_start = 6;				//defini la pin utiliser pour le start
+int in_raz = 7;					//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
-int out_relay = 36;				//defini la pin utiliser pour le relai
+int out_relay = 8;				//defini la pin utiliser pour le relai 3 de la platine 
 
 
 
@@ -64,8 +64,8 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	//lcd.empty();//Clear de l'ecran		//PARALLAX
 	
 	//definition du roles des E/S 
-	pinMode(in_tempo_409, INPUT); 		// 409 
-	pinMode(in_tempo_401, INPUT); 		// 401
+	pinMode(in_tempo_409, INPUT_PULLUP); 		// 409 
+	pinMode(in_tempo_401, INPUT_PULLUP); 		// 401
 	pinMode(EX, INPUT_PULLUP);					// choix Exitation
 	pinMode(D_EX, INPUT_PULLUP); 				// choix Desexciation
 	pinMode(in_start,INPUT_PULLUP);		// start avec pullup
