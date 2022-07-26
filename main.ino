@@ -6,10 +6,10 @@
 //#include <arduino.h>
 #include <SoftwareSerial.h>		//Voir la necessitée d'include cette LIB normalement non //PARALLAX
 
-//reste a faire 
+//PullUP OK 
+//LCDS Activé 
 
-//voire commen gerer la cmd du relai pour EX/D_EX
-//la mesure des tempos a la d'esexitation a verifier 
+
 
 #define ROWS 4				//Nombre de lignes Uniquement avec la lib paralax
 #define COLS 20				//Nombre de colonnes Uniquement avec la lib paralax
@@ -17,7 +17,7 @@
 ParallaxLCD lcds(3,ROWS,COLS); // choix pin TX, Lignes, colone //PARA
 //ligne Colone
 
-LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C //I2C
+//LiquidCrystal_I2C lcd(0x27,20,4);	// adresse du LCD I2C //I2C
 //Colone Ligne
 
 
@@ -30,17 +30,19 @@ float temp_tempo;					//Temps
 int tempo = 0;						//Variable a 1 pour tenmpo en mesure
 
 //def des pin Entrée
-
-int EX = 30;//30 //4					//pin comutateur choix Exit d'ezexit
-int D_EX = 31;//31 //5					//pin comutateur choix Exit d'ezexit
-int in_tempo_409 = 32;//32 //2			//defini la pin utiliser pour le 409
-int in_tempo_401 = 33;//33 //3			//defini la pin utiliser pour le 401
-int in_start = 34;//34 //6				//defini la pin utiliser pour le start
-int in_raz = 35;//35	//7				//defini la pin utiliser pour le raz
+//1er com Arduino Mega // 2 em Arduino UNO
+int EX = 4;//30 //4					//pin comutateur choix Exit d'ezexit
+int D_EX = 5;//31 //5					//pin comutateur choix Exit d'ezexit
+int in_tempo_409 = 2;//32 //2			//defini la pin utiliser pour le 409
+int in_tempo_401 = 3;//33 //3			//defini la pin utiliser pour le 401
+int in_start = 6;//34 //6				//defini la pin utiliser pour le start
+int in_raz = 7;//35	//7				//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
-int out_relay = 36;//36 //8				//defini la pin utiliser pour le relai 3 de la platine 
+int out_relay = 8;//36 //8				//defini la pin utiliser pour le relai 3 de la platine 
+
+
 
 /**
  * void ParallaxLCD::playTone(int duration, int scale, int note)
@@ -74,17 +76,17 @@ lcds.playTone(212, 215, 229);	//LA 6
 
 int choix()
 {
-	if (digitalRead(EX)==1 && digitalRead(D_EX)==0){ return 1;} // CHOIX TEMPO exitation 
-	if (digitalRead(EX)==0 && digitalRead(D_EX)==1){ return 2;} // CHOIX TEMPO dezesxit
+	if (digitalRead(EX)==0 && digitalRead(D_EX)==1){ return 1;} // CHOIX TEMPO exitation 
+	if (digitalRead(EX)==1 && digitalRead(D_EX)==0){ return 2;} // CHOIX TEMPO dezesxit
 	else return 0;
 }
 
 void setup() // la boucle setup  est executer unique a la mise en service de l'arduino
 {
 	//Set du LCD i2c
-	lcd.init();			// initialisation de l'ecrant LCD 	//I2C
-	lcd.backlight();	// allumage du retro-eclairage 		//I2C
-	lcd.setCursor(0,0); // positionement du curseur 		//I2C
+	//lcd.init();			// initialisation de l'ecrant LCD 	//I2C
+	//lcd.backlight();	// allumage du retro-eclairage 		//I2C
+	//lcd.setCursor(0,0); // positionement du curseur 		//I2C
 
 	Serial.begin(9600); // initialise la connexion série "USB" à 9600 bauds 
 	
@@ -123,48 +125,48 @@ void loop()
 
 		{
 			
-			lcd.setCursor(0,0);
-			lcd.print("Un seul choix   ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
-			lcds.at(0,0,"Choix Incorect");		//PARALLAX
+			//lcd.setCursor(0,0);
+			//lcd.print("Choix Incorect             ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
+			lcds.at(0,0,"Choix Incorect             ");		//PARALLAX
 			break;
 		}
 		
 		case 1: // CHOIX TEMPO exitation 
 		{
-			lcd.setCursor(0,0);// on positionement du curseur a la ligne 0 colonne 0
-			lcd.print("TEMPO exitation ");// on affiche le message
-			lcds.at(0,0,"TEMPO exitation ");		//PARALLAX
+			//lcd.setCursor(0,0);// on positionement du curseur a la ligne 0 colonne 0
+			//lcd.print("TEMPO excitation ");// on affiche le message
+			lcds.at(0,0,"TEMPO excitation ");		//PARALLAX
 
 			if (tempo==0 && digitalRead(out_relay)==HIGH){
 				digitalWrite(out_relay, LOW);
 				delay(50);
 			}
 
-			if (tempo==0 && digitalRead(in_start)==1){// si la tempo est off et que le start est en HIGH exitation du 401
+			if (tempo==0 && digitalRead(in_start)==0){// si la tempo est off et que le start est en HIGH exitation du 401
 				digitalWrite(out_relay, HIGH);// on allume le relai
 			}
 			
-			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
+			if(digitalRead(in_tempo_409)==0 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
 			{
 				tempo = 1; // on active le tempo
 				tempo_debut = millis(); // on enregistre le temps de début
 			}
-			if(digitalRead(in_tempo_401)== 1 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
+			if(digitalRead(in_tempo_401)== 0 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
 			{
 
 				tempo_fin = millis(); // on enregistre le temps de fin
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
 				tempo = 0; // on desactive le tempo
-				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
-				lcd.print("Temps : ");// on affiche le texte					//I2C
+				//lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
+				//lcd.print("Temps : ");// on affiche le texte					//I2C
 				lcds.at(1,0,"Temps : ");	//PARALLAX
-				lcd.print(temp_tempo);// on affiche le temps					//I2C
+				//lcd.print(temp_tempo);// on affiche le temps					//I2C
 				lcds.at(1,8,String(temp_tempo));	//PARALLA
-				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
+				//lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
 				lcds.at(1,12," s       ");
 				
-				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
-				lcd.print("                  ");// on efface la 3eme ligne
+				//lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
+				//lcd.print("                  ");// on efface la 3eme ligne
 				lcds.at(2,0,"                     ");	//PARALLAX
 				//delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
@@ -178,38 +180,38 @@ void loop()
 		case 2: // CHOIX TEMPO de-esxitation reste a coder ici 
 		{
 			
-			lcd.setCursor(0,0); 		//I2C
-			lcd.print("TEMPO de-zexit  ");//I2C
-			lcds.at(0,0,"TEMPO de-zexit  ");		//PARALLAX
+			//lcd.setCursor(0,0); 		//I2C
+			//lcd.print("TEMPO Désexcitation  ");//I2C
+			lcds.at(0,0,"TEMPO Désexcitation  ");		//PARALLAX
 
 			if (tempo==0 && digitalRead(out_relay)==LOW){
 				digitalWrite(out_relay, HIGH);
 				delay(50);
 			}
 
-			if (tempo==0 && digitalRead(in_start)==1){// 
+			if (tempo==0 && digitalRead(in_start)==0){// 
 				digitalWrite(out_relay, LOW);// 
 			}
 			
-			if(digitalRead(in_tempo_409)==0 && tempo==0 ) //
+			if(digitalRead(in_tempo_409)==1 && tempo==0 ) //
 			{
 				tempo = 1; // on active le tempo
 				tempo_debut = millis(); // on enregistre le temps de début
 			}
 
-			if(digitalRead(in_tempo_401)== 1 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
+			if(digitalRead(in_tempo_401)== 0 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
 			{
 				tempo_fin = millis(); // on enregistre le temps de fin
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
 				tempo = 0; // on desactive le tempo
-				lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
-				lcd.print("Temps : ");// on affiche le texte					//I2C
+				//lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne //I2C
+				//lcd.print("Temps : ");// on affiche le texte					//I2C
 				lcds.at(0,1,"Temps : ");	//PARALLAX
-				lcd.print(temp_tempo);// on affiche le temps					//I2C
-				lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
+				//lcd.print(temp_tempo);// on affiche le temps					//I2C
+				//lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
 				lcds.at(0,1,"Temps : ");	//PARALLAX
-				lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
-				lcd.print("                  ");// on efface la 3eme ligne
+				//lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
+				//lcd.print("                  ");// on efface la 3eme ligne
 				lcds.at(0,2,"                  ");	//PARALLAX
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
@@ -224,32 +226,32 @@ void loop()
 if(tempo==1){		//Affichage chrono
 	if(millis()-delay_aff>100){ //delay discret de 100ms
 		delay_aff=millis(); // on enregistre le temps
-		lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
-		lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
+		//lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
+		//lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
 		lcds.at(1,0,"Tempo en cours: ");			//PARALLAX
-		lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
-		lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
+		//lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
+		//lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
 		lcds.at(2,0,String(float(millis()-tempo_debut)/1000));	//PARALLAX
 	}
 }
 
 
 //raz
-if (digitalRead(in_raz)==1){		// si le raz est en HIGH
+if (digitalRead(in_raz)==0){		// si le raz est en HIGH
 	//digitalWrite(out_relay, LOW);	// on etein le relai
 	temp_tempo=0;					//Reset du timer
 	tempo = 0;						//Reset de l'etat tempo
-	lcd.setCursor(0,0); 
-	lcd.print("                    ");		//I2C
+	//lcd.setCursor(0,0); 
+	//lcd.print("                    ");		//I2C
 	lcds.at(0,0,"                    ");	//PARALLAX
-	lcd.setCursor(0,1); 
-	lcd.print("                    ");		//I2C
+	//lcd.setCursor(0,1); 
+	//lcd.print("                    ");		//I2C
 	lcds.at(1,0,"                    ");	//PARALLAX
-	lcd.setCursor(0,2);
-	lcd.print("                    ");		//I2C
+	//lcd.setCursor(0,2);
+	//lcd.print("                    ");		//I2C
 	lcds.at(2,0,"                    ");	//PARALLAX
-	lcd.setCursor(0,3);
-	lcd.print("                    ");		//I2C	
+	//lcd.setCursor(0,3);
+	//lcd.print("                    ");		//I2C	
 	lcds.at(3,0,"                    ");	//PARALLAX
 	}
 
