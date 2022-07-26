@@ -17,7 +17,7 @@
             "intelliSenseMode": "gcc-x64",
             "includePath": [
                 "C:\\Users\\zellio\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\cores\\arduino",
-                "C:\\Users\\zellio\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\variants\\mega",
+                "C:\\Users\\zellio\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\variants\\standard",
                 "C:\\Users\\zellio\\Documents\\Arduino\\libraries\\LiquidCrystal_I2C",
                 "C:\\Users\\zellio\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\libraries\\Wire\\src",
                 "C:\\Users\\zellio\\Documents\\Arduino\\libraries\\Parallax_LCD\\src",
@@ -34,7 +34,7 @@
             "defines": [
                 "F_CPU=16000000L",
                 "ARDUINO=10816",
-                "ARDUINO_AVR_MEGA2560",
+                "ARDUINO_AVR_UNO",
                 "ARDUINO_ARCH_AVR",
                 "__DBL_MIN_EXP__=(-125)",
                 "__HQ_FBIT__=15",

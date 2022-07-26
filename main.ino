@@ -41,7 +41,7 @@ int in_raz = 7;//35	//7				//defini la pin utiliser pour le raz
 //def des pin sortie
 
 int out_relay = 8;//36 //8				//defini la pin utiliser pour le relai 3 de la platine 
-
+int led_13 =13; // led sur la board
 
 
 /**
@@ -105,7 +105,7 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	pinMode(in_raz,INPUT_PULLUP);		// raz avec pullup
 
 	pinMode(out_relay,OUTPUT);			// relai
-
+	pinMode(led_13,OUTPUT);			// relai
 }
 
 void loop() 
@@ -128,6 +128,7 @@ void loop()
 			//lcd.setCursor(0,0);
 			//lcd.print("Choix Incorect             ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
 			lcds.at(0,0,"Choix Incorect             ");		//PARALLAX
+
 			break;
 		}
 		
@@ -139,11 +140,13 @@ void loop()
 
 			if (tempo==0 && digitalRead(out_relay)==HIGH){
 				digitalWrite(out_relay, LOW);
+				digitalWrite(led_13, LOW);
 				delay(50);
 			}
 
 			if (tempo==0 && digitalRead(in_start)==0){// si la tempo est off et que le start est en HIGH exitation du 401
 				digitalWrite(out_relay, HIGH);// on allume le relai
+				digitalWrite(led_13, HIGH);
 			}
 			
 			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
@@ -170,6 +173,7 @@ void loop()
 				lcds.at(2,0,"                     ");	//PARALLAX
 				//delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
+				digitalWrite(led_13, LOW);
 				//impmarch();		//play la musique
 				
 			}
@@ -186,11 +190,13 @@ void loop()
 
 			if (tempo==0 && digitalRead(out_relay)==LOW){
 				digitalWrite(out_relay, HIGH);
+				digitalWrite(led_13, HIGH);
 				delay(50);
 			}
 
 			if (tempo==0 && digitalRead(in_start)==0){// 
 				digitalWrite(out_relay, LOW);// 
+				digitalWrite(led_13, LOW);
 			}
 			
 			if(digitalRead(in_tempo_409)==0 && tempo==0 ) //
@@ -216,6 +222,7 @@ void loop()
 				lcds.at(2,0,"                  ");	//PARALLAX
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
+				digitalWrite(led_13, LOW);
 			}
 			break;//Fu
 		}
