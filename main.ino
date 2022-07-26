@@ -126,9 +126,10 @@ void loop()
 		{
 			
 			//lcd.setCursor(0,0);
-			//lcd.print("Choix Incorect             ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
-			lcds.at(0,0,"Choix Incorect             ");		//PARALLAX
-
+			//lcd.print("Choix Incorrect             ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
+			lcds.at(0,0,"Choix Incorrect     ");		//PARALLAX
+			digitalWrite(out_relay, LOW);
+			digitalWrite(led_13, LOW);
 			break;
 		}
 		
