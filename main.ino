@@ -31,12 +31,12 @@ int tempo = 0;						//Variable a 1 pour tenmpo en mesure
 
 //def des pin Entrée
 //1er com Arduino Mega // 2 em Arduino UNO
-int EX = 4;//30 //4					//pin comutateur choix Exit d'ezexit
-int D_EX = 5;//31 //5					//pin comutateur choix Exit d'ezexit
+int EX = 5;//30 //5					//pin comutateur choix Exit d'ezexit
+int D_EX = 6;//31 //6					//pin comutateur choix Exit d'ezexit
 int in_tempo_409 = 2;//32 //2			//defini la pin utiliser pour le 409
 int in_tempo_401 = 3;//33 //3			//defini la pin utiliser pour le 401
-int in_start = 6;//34 //6				//defini la pin utiliser pour le start
-int in_raz = 7;//35	//7				//defini la pin utiliser pour le raz
+int in_start = 9;//34 //9				//defini la pin utiliser pour le start
+int in_raz = 10;//35//10				//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
