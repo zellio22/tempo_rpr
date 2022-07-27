@@ -8,6 +8,13 @@ Info shield Relais
 https://docs.arduino.cc/tutorials/4-relays-shield/4-relay-shield-basics#hardware--software-needed
 
 
+module relay 
+relay 1 ==4
+relay 2 ==7
+relay 3 ==8
+relay 4 ==12
+
+
 void ParallaxLCD::playTone(int duration, int scale, int note) {
 /**
  * Duration: 208 - 214 (1/64th note - 1 whole note[2 secs])
