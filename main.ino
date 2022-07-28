@@ -35,8 +35,8 @@ int EX = 5;//30 //5					//pin comutateur choix Exit d'ezexit
 int D_EX = 6;//31 //6					//pin comutateur choix Exit d'ezexit
 int in_tempo_409 = 2;//32 //2			//defini la pin utiliser pour le 409
 int in_tempo_401 = 3;//33 //3			//defini la pin utiliser pour le 401
-int in_start = 9;//34 //9				//defini la pin utiliser pour le start
-int in_raz = 10;//35//10				//defini la pin utiliser pour le raz
+int in_start = 10;//34 //10				//defini la pin utiliser pour le start
+int in_raz = 11;//35//11				//defini la pin utiliser pour le raz
 
 //def des pin sortie
 
@@ -51,7 +51,7 @@ int led_13 =13; // led sur la board
  * Note    : 220 - 232 (A, A#, B, etc..., F#, F, G#)
  */
 
-void impmarch()
+void impmarch()  //declaration de la fonction pour jouer de la musique 
 {
 lcds.playTone(212, 215, 229);	//LA 3
 lcds.playTone(212, 215, 229);	//LA 3
@@ -88,7 +88,7 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	//lcd.backlight();	// allumage du retro-eclairage 		//I2C
 	//lcd.setCursor(0,0); // positionement du curseur 		//I2C
 
-	Serial.begin(9600); // initialise la connexion série "USB" à 9600 bauds 
+	Serial.begin(9600); // initialise la connexion série "USB" à 9600 bauds non utilisé
 	
 	//Set du LCD serial 
 	lcds.setup();	//PARA
@@ -97,6 +97,11 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	lcds.empty();//Clear de l'ecran		//PARALLAX
 	
 	//definition du roles des E/S 
+	/*Nota le INPUL_PULLUP connecte une resistance entre l'entré de l'arduino et le +5V interne 
+	* Donc l'entrée est vrai quand elle et reliée au GND de l'arduino
+	* if (digitalRead(EX)==0){ return 1;} // Return 1 quand l'entrée est à 0
+	* fonctionne comme une logique a manque 
+	*/
 	pinMode(in_tempo_409, INPUT_PULLUP); 		// 409 
 	pinMode(in_tempo_401, INPUT_PULLUP); 		// 401
 	pinMode(EX, INPUT_PULLUP);					// choix Exitation
@@ -108,10 +113,10 @@ void setup() // la boucle setup  est executer unique a la mise en service de l'a
 	pinMode(led_13,OUTPUT);			// relai
 }
 
-void loop() 
+void loop() //fonction Main Bloucle principale 
 {
 
-	switch (choix()) // voir comme en dessou
+	switch (choix()) // voir en dessou
 	/*
 	La structure de controle Switch est une structure de controle qui permet de faire une seule action en fonction 
 	du return de la fonction choix
@@ -128,8 +133,8 @@ void loop()
 			//lcd.setCursor(0,0);
 			//lcd.print("Choix Incorrect             ");//quand tu vien ici c'est que tu a choisi un choix qui n'existe pas ... merci l'ia
 			lcds.at(0,0,"Choix Incorrect     ");		//PARALLAX
-			digitalWrite(out_relay, LOW);
-			digitalWrite(led_13, LOW);
+			digitalWrite(out_relay, LOW);	//mise a 0 du relai quand on choisi un choix qui n'existe pas
+			digitalWrite(led_13, LOW);		//mise a 0 de la led 13 quand on choisi un choix qui n'existe pas
 			break;
 		}
 		
@@ -139,8 +144,8 @@ void loop()
 			//lcd.print("TEMPO excitation ");// on affiche le message
 			lcds.at(0,0,"TEMPO excitation ");		//PARALLAX
 
-			if (tempo==0 && digitalRead(out_relay)==HIGH){
-				digitalWrite(out_relay, LOW);
+			if (tempo==0 && digitalRead(out_relay)==HIGH){	
+				digitalWrite(out_relay, LOW); //mise à 0 du relai
 				digitalWrite(led_13, LOW);
 				delay(50);
 			}
