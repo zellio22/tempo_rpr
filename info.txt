@@ -66,15 +66,23 @@ LA 6    lcds.playTone(, 215, 222);
 
 
 
-int main(void)
-{
-  int s = 7322;
- 
-  int annee   = s / 60 / 60 / 24 / 365;
-  int jour    = s / 60 / 60 / 24 % 365;
-  int heure   = s / 60 / 60 % 24;
-  int minute  = s / 60 % 60;
-  int seconde = s % 60;
- 
-  printf("\n%d an(s), %d jour(s), %d heure(s), %d minute(s), %d seconde(s)\n\n", annee, jour, heure, minute, seconde);
-  return 0;
+void timesplit(unsigned long ms){
+
+    
+
+    unsigned long heur   = ms / 60 / 60000 % 24;
+    unsigned long minute  = ms / 60000 % 60;
+    unsigned long seconde = ms / 1000 % 60;
+    unsigned long miliseconde = ms %1000;
+
+    Serial.print("Time: ");
+    Serial.print(heur);
+    Serial.print("h ");
+    Serial.print(minute);
+    Serial.print("m ");
+    Serial.print(seconde);
+    Serial.print("s ");
+    Serial.print(miliseconde);
+    Serial.print("ms   ");
+    Serial.println(ms);
+}
