@@ -84,24 +84,15 @@ void timeSplit(unsigned long ms){
 	int lenMS = String(miliseconde).length();
 
 	lcds.at(2,0,"T: ");//T: //3
-    Serial.print("Time: ");
 	lcds.at(2,3,heure);
-    Serial.print(heure);
 	lcds.at(2,3+lenH,"h ");
-    Serial.print("h ");
 	lcds.at(2,5+lenH,minute);
-    Serial.print(minute);
 	lcds.at(2,5+lenH+lenM,"m ");
-    Serial.print("m ");
 	lcds.at(2,7+lenH+lenM,seconde);
-    Serial.print(seconde);
 	lcds.at(2,7+lenH+lenM+lenS,"s ");
-    Serial.print("s ");
 	lcds.at(2,9+lenH+lenM+lenS,miliseconde);
-    Serial.print(miliseconde);
 	lcds.at(2,9+lenH+lenM+lenS+lenMS,"ms");
-    Serial.print("ms   ");
-    Serial.println(ms);
+
 }
 
 void setup() // la boucle setup  est executer unique a la mise en service de l'arduino
