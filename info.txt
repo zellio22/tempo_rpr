@@ -66,4 +66,15 @@ LA 6    lcds.playTone(, 215, 222);
 
 
 
-
+int main(void)
+{
+  int s = 7322;
+ 
+  int annee   = s / 60 / 60 / 24 / 365;
+  int jour    = s / 60 / 60 / 24 % 365;
+  int heure   = s / 60 / 60 % 24;
+  int minute  = s / 60 % 60;
+  int seconde = s % 60;
+ 
+  printf("\n%d an(s), %d jour(s), %d heure(s), %d minute(s), %d seconde(s)\n\n", annee, jour, heure, minute, seconde);
+  return 0;

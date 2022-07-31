@@ -170,13 +170,15 @@ void loop() //fonction Main Bloucle principale
 				//lcd.print("Temps : ");// on affiche le texte					//I2C
 				lcds.at(1,0,"Temps : ");	//PARALLAX
 				//lcd.print(temp_tempo);// on affiche le temps					//I2C
-				lcds.at(1,8,String(temp_tempo));	//PARALLA
+				String temp_tempo_str = String(temp_tempo);					//PARALLAX
+				lcds.at(1,8,temp_tempo_str);	//PARALLA
 				//lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
-				lcds.at(1,12," s       ");
+				int len = temp_tempo_str.length();							//PARALLAX
+				lcds.at(1,8+len," s       ");
 				
 				//lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
 				//lcd.print("                  ");// on efface la 3eme ligne
-				lcds.at(2,0,"                     ");	//PARALLAX
+				lcds.at(2,0,"                  ");							//PARALLAX
 				//delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);
@@ -221,8 +223,13 @@ void loop() //fonction Main Bloucle principale
 				lcds.at(1,0,"Temps : ");	//PARALLAX
 				//lcd.print(temp_tempo);// on affiche le temps					//I2C
 				//lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
-				lcds.at(1,8,String(temp_tempo));	//PARALLA
-				lcds.at(1,12," s       ");
+				
+				String temp_tempo_str = String(temp_tempo);					//PARALLAX
+				lcds.at(1,8,temp_tempo_str);	//PARALLA
+				//lcd.print(" s      ");// on affiche l'unité et on rajouter des espace pour fair joly'//I2C
+				int len = temp_tempo_str.length();							//PARALLAX
+				lcds.at(1,9+len," s       ");
+				
 				//lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
 				//lcd.print("                  ");// on efface la 3eme ligne
 				lcds.at(2,0,"                  ");	//PARALLAX
@@ -243,9 +250,10 @@ if(tempo==1){		//Affichage chrono
 		delay_aff=millis(); // on enregistre le temps
 		//lcd.setCursor(0,1);// on positionne le curseur sur la 2em ligne	//I2C
 		//lcd.print("Tempo en cours: ");// on affiche le texte			//I2C
-		lcds.at(1,0,"Tempo en cours: ");			//PARALLAX
+		lcds.at(1,0,"Tempo en cours:        ");			//PARALLAX
 		//lcd.setCursor(0,2);// on positionne le curseur sur la 3em ligne	//I2C
 		//lcd.print(float(millis()-tempo_debut)/1000);// on affiche le temps en temp reel in real time	//I2C 
+		lcds.at(2,4,"                       ");	//PARALLAX
 		lcds.at(2,0,String(float(millis()-tempo_debut)/1000));	//PARALLAX
 	}
 }
