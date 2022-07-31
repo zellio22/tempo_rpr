@@ -70,22 +70,38 @@ int choix()
 	else return 0;
 }
 
-void timez(int ms){
+void timeSplit(unsigned long ms){
 
- 
 
-  int heure   = ms / 60 / 60 % 24;
-  int minute  = ms / 60 % 60;
-  int seconde = ms % 60;
-  int miliseconde = ms;
+    int heure   = ms / 60 / 60000 % 24;
+    int minute  = ms / 60000 % 60;
+    int seconde = ms / 1000 % 60;
+    int miliseconde = ms %1000;
+
+	int lenH = String(heure).length();
+	int lenM = String(minute).length();
+	int lenS = String(seconde).length();
+	int lenMS = String(miliseconde).length();
+
+	lcds.at(2,0,"T: ");//T: //3
     Serial.print("Time: ");
+	lcds.at(2,3,heure);
     Serial.print(heure);
+	lcds.at(2,3+lenH,"h ");
     Serial.print("h ");
+	lcds.at(2,5+lenH,minute);
     Serial.print(minute);
+	lcds.at(2,5+lenH+lenM,"m ");
     Serial.print("m ");
+	lcds.at(2,7+lenH+lenM,seconde);
     Serial.print(seconde);
-    Serial.println("s ");
-
+	lcds.at(2,7+lenH+lenM+lenS,"s ");
+    Serial.print("s ");
+	lcds.at(2,9+lenH+lenM+lenS,miliseconde);
+    Serial.print(miliseconde);
+	lcds.at(2,9+lenH+lenM+lenS+lenMS,"ms");
+    Serial.print("ms   ");
+    Serial.println(ms);
 }
 
 void setup() // la boucle setup  est executer unique a la mise en service de l'arduino
@@ -164,13 +180,14 @@ void loop() //fonction Main Bloucle principale
 
 				tempo_fin = millis(); // on enregistre le temps de fin
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
+				timeSplit(tempo_fin - tempo_debut);
 				tempo = 0; // on desactive le tempo
 				lcds.at(1,0,"Temps : ");	//PARALLAX
 				String temp_tempo_str = String(temp_tempo);					//PARALLAX
 				lcds.at(1,8,temp_tempo_str);	//PARALLA
 				int len = temp_tempo_str.length();							//PARALLAX
-				lcds.at(1,8+len," s       ");
-				lcds.at(2,0,"                  ");							//PARALLAX
+				lcds.at(1,8+len," s      ");
+				//lcds.at(2,0,"                  ");							//PARALLAX
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);
@@ -207,14 +224,15 @@ void loop() //fonction Main Bloucle principale
 			{
 				tempo_fin = millis(); // on enregistre le temps de fin
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
+				timeSplit(tempo_fin - tempo_debut);
 				tempo = 0; // on desactive le tempo
 				lcds.at(1,0,"Temps : ");	//PARALLAX
 				
 				String temp_tempo_str = String(temp_tempo);					//PARALLAX
 				lcds.at(1,8,temp_tempo_str);	//PARALLA
 				int len = temp_tempo_str.length();							//PARALLAX
-				lcds.at(1,9+len," s       ");
-				lcds.at(2,0,"                  ");	//PARALLAX
+				lcds.at(1,8+len," s      ");
+				//lcds.at(2,0,"                  ");	//PARALLAX
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);

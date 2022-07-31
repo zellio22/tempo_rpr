@@ -66,17 +66,17 @@ LA 6    lcds.playTone(, 215, 222);
 
 
 
-void timesplit(unsigned long ms){
+void timez(unsigned long ms){
 
     
 
-    unsigned long heur   = ms / 60 / 60000 % 24;
-    unsigned long minute  = ms / 60000 % 60;
-    unsigned long seconde = ms / 1000 % 60;
-    unsigned long miliseconde = ms %1000;
+    int heure   = ms / 60 / 60000 % 24;
+    int minute  = ms / 60000 % 60;
+    int seconde = ms / 1000 % 60;
+    int miliseconde = ms %1000;
 
     Serial.print("Time: ");
-    Serial.print(heur);
+    Serial.print(heure);
     Serial.print("h ");
     Serial.print(minute);
     Serial.print("m ");
@@ -86,3 +86,5 @@ void timesplit(unsigned long ms){
     Serial.print("ms   ");
     Serial.println(ms);
 }
+
+
