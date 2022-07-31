@@ -168,6 +168,7 @@ void loop() //fonction Main Bloucle principale
 			if (tempo==0 && digitalRead(in_start)==0){// si la tempo est off et que le start est en HIGH exitation du 401
 				digitalWrite(out_relay, HIGH);// on allume le relai
 				digitalWrite(led_13, HIGH);
+				lcds.at(3,0,"                    ");
 			}
 			
 			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
@@ -182,12 +183,12 @@ void loop() //fonction Main Bloucle principale
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
 				timeSplit(tempo_fin - tempo_debut);
 				tempo = 0; // on desactive le tempo
-				lcds.at(1,0,"Temps : ");	//PARALLAX
+				lcds.at(1,0,"Temps :             ");	//PARALLAX
 				String temp_tempo_str = String(temp_tempo);					//PARALLAX
 				lcds.at(1,8,temp_tempo_str);	//PARALLA
 				int len = temp_tempo_str.length();							//PARALLAX
-				lcds.at(1,8+len," s      ");
-				//lcds.at(2,0,"                  ");							//PARALLAX
+				lcds.at(1,8+len," s");
+				lcds.at(3,0,"Fin de la Tempo");							//PARALLAX
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);
@@ -212,6 +213,7 @@ void loop() //fonction Main Bloucle principale
 			if (tempo==0 && digitalRead(in_start)==0){// 
 				digitalWrite(out_relay, LOW);// 
 				digitalWrite(led_13, LOW);
+				lcds.at(3,0,"                    ");
 			}
 			
 			if(digitalRead(in_tempo_409)==0 && tempo==0 ) //
@@ -226,13 +228,12 @@ void loop() //fonction Main Bloucle principale
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
 				timeSplit(tempo_fin - tempo_debut);
 				tempo = 0; // on desactive le tempo
-				lcds.at(1,0,"Temps : ");	//PARALLAX
-				
+				lcds.at(1,0,"Temps :             ");	//PARALLAX
 				String temp_tempo_str = String(temp_tempo);					//PARALLAX
 				lcds.at(1,8,temp_tempo_str);	//PARALLA
 				int len = temp_tempo_str.length();							//PARALLAX
-				lcds.at(1,8+len," s      ");
-				//lcds.at(2,0,"                  ");	//PARALLAX
+				lcds.at(1,8+len," s");
+				lcds.at(3,0,"Fin de la Tempo");
 				delay(200);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);
@@ -249,8 +250,9 @@ if(tempo==1){		//Affichage chrono
 	if(millis()-delay_aff>100){ //delay discret de 100ms
 		delay_aff=millis(); // on enregistre le temps
 		lcds.at(1,0,"Tempo en cours:        ");			//PARALLAX
-		lcds.at(2,4,"                       ");	//PARALLAX
-		lcds.at(2,0,String(float(millis()-tempo_debut)/1000));	//PARALLAX
+		//lcds.at(2,4,"                       ");	//PARALLAX
+		timeSplit(millis()-tempo_debut);
+		lcds.at(3,0,String(float(millis()-tempo_debut)/1000));	//PARALLAX
 	}
 }
 
