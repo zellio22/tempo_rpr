@@ -162,7 +162,7 @@ void loop() //fonction Main Bloucle principale
 				lcds.at(3,0,"                    ");
 			}
 			
-			if(digitalRead(in_tempo_409)==1 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
+			if(digitalRead(in_tempo_409)==0 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
 			{
 				tempo = 1; // on active le tempo
 				tempo_debut = millis(); // on enregistre le temps de début
@@ -207,7 +207,7 @@ void loop() //fonction Main Bloucle principale
 				lcds.at(3,0,"                    ");
 			}
 			
-			if(digitalRead(in_tempo_409)==0 && tempo==0 ) //
+			if(digitalRead(in_tempo_409)==1 && tempo==0 ) //
 			{
 				tempo = 1; // on active le tempo
 				tempo_debut = millis(); // on enregistre le temps de début
