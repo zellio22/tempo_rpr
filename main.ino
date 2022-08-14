@@ -1,5 +1,3 @@
-
-#include <LiquidCrystal_I2C.h> 	//Lib I2C en focntion de l'ecrant
 #include <ParallaxLCD.h>		//Lib ParallaxLCD pour LCD serial //PARALLAX
 
 #include <SoftwareSerial.h>		//Voir la necessitée d'include cette LIB normalement non //PARALLAX
@@ -134,10 +132,10 @@ void loop() //fonction Main Bloucle principale
 	la fonction Choix return 1 pour une selection exitation
 	la fonction Choix return 2 pour une selection desexitation
 	*/
-
+	
 	{
 		case 0: // corespond a un " if choix ==0 "et nexecute pas la suite du switch quand tu vien ici c'est que tu a choisi un choix qui n'existe pas
-
+			
 		{
 			
 			lcds.at(0,0,"Choix Incorrect     ");		//PARALLAX
@@ -160,12 +158,14 @@ void loop() //fonction Main Bloucle principale
 				digitalWrite(out_relay, HIGH);// on allume le relai
 				digitalWrite(led_13, HIGH);
 				lcds.at(3,0,"                    ");
+				
 			}
 			
 			if(digitalRead(in_tempo_409)==0 && tempo==0 ) // si l'entrée est en HIGH et que la tempo est off
 			{
 				tempo = 1; // on active le tempo
 				tempo_debut = millis(); // on enregistre le temps de début
+				lcds.at(3,0,"                    ");
 			}
 			if(digitalRead(in_tempo_401)== 0 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
 			{
@@ -180,7 +180,7 @@ void loop() //fonction Main Bloucle principale
 				int len = temp_tempo_str.length();							//PARALLAX
 				lcds.at(1,8+len," s");
 				lcds.at(3,0,"Fin de la Tempo");							//PARALLAX
-				delay(200);						// on attend 200ms pour repos de la tempo
+				delay(1000);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);
 				//impmarch();		//play la musique
@@ -211,9 +211,10 @@ void loop() //fonction Main Bloucle principale
 			{
 				tempo = 1; // on active le tempo
 				tempo_debut = millis(); // on enregistre le temps de début
+				lcds.at(3,0,"                    "); 
 			}
 
-			if(digitalRead(in_tempo_401)== 0 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
+			if(digitalRead(in_tempo_401)== 1 && tempo==1 ) // si l'entrée est en LOW et que la tempo est en cour
 			{
 				tempo_fin = millis(); // on enregistre le temps de fin
 				temp_tempo = (float)(tempo_fin - tempo_debut)/1000; // on calcule le temps
@@ -225,7 +226,7 @@ void loop() //fonction Main Bloucle principale
 				int len = temp_tempo_str.length();							//PARALLAX
 				lcds.at(1,8+len," s");
 				lcds.at(3,0,"Fin de la Tempo");
-				delay(200);						// on attend 200ms pour repos de la tempo
+				delay(1000);						// on attend 200ms pour repos de la tempo
 				digitalWrite(out_relay, LOW);	// on etein le relai
 				digitalWrite(led_13, LOW);
 				//impmarch();

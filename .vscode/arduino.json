@@ -1,6 +1,6 @@
 {
     "sketch": "main.ino",
     "board": "arduino:avr:uno",
-    "port": "COM16",
-    "programmer": "arduino:avrisp"
+    "programmer": "arduino:avrisp",
+    "port": "/dev/ttyACM0"
 }
